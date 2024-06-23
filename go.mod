@@ -1,4 +1,4 @@
-module changeme
+module lowkyvideo
 
 go 1.21
 
