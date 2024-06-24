@@ -1,10 +1,7 @@
 <script lang="ts">
-	import { profiles } from "./../stores/profiles.ts";
+	import { profiles, setProfile } from "./../stores/profiles.ts";
 	import { Avatar, Button } from "bits-ui";
 	import { Plus } from "phosphor-svelte";
-	import { onMount } from "svelte";
-	import { GetProfiles } from "wailsjs/go/main/App";
-	import AddProfileForm from "./AddProfileDialog.svelte";
 	import AddProfileDialog from "./AddProfileDialog.svelte";
 
 	const getAbbr = (profile: { Name: string }) =>
@@ -16,6 +13,7 @@
 <div class="flex gap-2">
 	{#each $profiles as profile}
 		<Button.Root
+			on:click={() => setProfile(profile.ID)}
 			class="inline-flex items-center justify-center rounded-input bg-dark/0
 	p-2 text-[15px] text-dark shadow-none hover:shadow-mini
 	hover:bg-dark/15 active:scale-98 active:transition-all w-24"
