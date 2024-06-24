@@ -2,14 +2,9 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
-	"log"
-	"lowkyvideo/config"
-	"os"
+	"lowkyvideo/db"
 	"os/exec"
-	"path/filepath"
-	"runtime"
 )
 
 // App struct
@@ -70,6 +65,8 @@ func (a *App) startup(ctx context.Context) {
 		fmt.Printf("error checking for %s: %v\n", "crunchy-cli", err)
 	}
 
+	db.InitDB()
+
 	a.ctx = ctx
 }
 
@@ -98,81 +95,14 @@ func (a *App) LoginToCrunchyCLI() bool {
 	return true
 }
 
-var db *sql.DB
-
-func getAppDataDir() (string, error) {
-	var appDataDir string
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
-	}
-
-	switch runtime.GOOS {
-	case "windows":
-		appDataDir = filepath.Join(os.Getenv("APPDATA"), config.AppName)
-	case "darwin":
-		appDataDir = filepath.Join(homeDir, "Library", "Application Support", config.AppName)
-	case "linux":
-		appDataDir = filepath.Join(homeDir, ".local", "share", config.AppName)
-	default:
-		appDataDir = filepath.Join(homeDir, config.AppName)
-	}
-
-	err = os.MkdirAll(appDataDir, os.ModePerm)
-	if err != nil {
-		return "", err
-	}
-
-	return appDataDir, nil
+func (a *App) GetUsers() ([]*db.User, error) {
+	return db.GetUsers()
 }
 
-func initDB() {
-	appDataDir, err := getAppDataDir()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	dbPath := filepath.Join(appDataDir, "app.db")
-	db, err = sql.Open("sqlite3", dbPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	createTable := `CREATE TABLE IF NOT EXISTS profiles (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			name TEXT UNIQUE
-	);`
-
-	_, err = db.Exec(createTable)
-	if err != nil {
-		log.Fatal(err)
-	}
+func (a *App) CreateUser(name string) error {
+	return db.CreateUser(name)
 }
 
-func (app *App) createProfile(name string) {
-	insertProfile := `INSERT INTO profiles (name) VALUES (?);`
-	_, err := db.Exec(insertProfile, name)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func (app *App) getProfiles() []string {
-	var profiles []string
-	rows, err := db.Query("SELECT name FROM profiles")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var name string
-		err = rows.Scan(&name)
-		if err != nil {
-			log.Fatal(err)
-		}
-		profiles = append(profiles, name)
-	}
-
-	return profiles
+func (a *App) GetUser(id int) (*db.User, error) {
+	return db.GetUser(id)
 }
