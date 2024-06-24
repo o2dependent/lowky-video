@@ -6,6 +6,7 @@ import (
 	"lowkyvideo/config"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -19,18 +20,17 @@ func getAppDataDir() (string, error) {
 		return "", err
 	}
 
-	// switch runtime.GOOS {
-	// case "windows":
-	// 	appDataDir = filepath.Join(os.Getenv("APPDATA"), config.AppName)
-	// case "darwin":
-	// 	appDataDir = filepath.Join(homeDir, "Library", "Application Support", config.AppName)
-	// case "linux":
-	// 	appDataDir = filepath.Join(homeDir, ".local", "share", config.AppName)
-	// default:
-	// 	appDataDir = filepath.Join(homeDir, config.AppName)
-	// }
-	appDataDir = filepath.Join(homeDir, "Users", "ethanolsen", "Desktop", config.AppName)
-	fmt.Printf("App data directory: %s\n", appDataDir)
+	switch runtime.GOOS {
+	case "windows":
+		appDataDir = filepath.Join(os.Getenv("APPDATA"), config.AppName)
+	case "darwin":
+		appDataDir = filepath.Join(homeDir, "Library", "Application Support", config.AppName)
+	case "linux":
+		appDataDir = filepath.Join(homeDir, ".local", "share", config.AppName)
+	default:
+		appDataDir = filepath.Join(homeDir, config.AppName)
+	}
+
 	err = os.MkdirAll(appDataDir, os.ModePerm)
 	if err != nil {
 		return "", err
@@ -50,7 +50,7 @@ func InitDB() error {
 	}
 
 	dbPath := filepath.Join(appDataDir, "app.db")
-
+	fmt.Print(appDataDir)
 	DB, err = sql.Open("sqlite3", dbPath)
 	if err != nil {
 		fmt.Printf("Error opening database: %v\n", err)
@@ -58,9 +58,10 @@ func InitDB() error {
 	}
 
 	createTable := `CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-    );`
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT
+);
+`
 
 	_, err = DB.Exec(createTable)
 	if err != nil {
