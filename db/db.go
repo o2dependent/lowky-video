@@ -58,10 +58,9 @@ func InitDB() error {
 	}
 
 	createTable := `CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT
-);
-`
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			name TEXT
+	);`
 
 	_, err = DB.Exec(createTable)
 	if err != nil {

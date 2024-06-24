@@ -1,37 +1,78 @@
 <script lang="ts">
-	import { Button } from "bits-ui";
+	import { Avatar, Button } from "bits-ui";
+	import { Plus } from "phosphor-svelte";
 	import { onMount } from "svelte";
 	import { GetUsers } from "wailsjs/go/main/App";
+	import AddProfileForm from "./AddProfileDialog.svelte";
+	import AddProfileDialog from "./AddProfileDialog.svelte";
 
 	let users: Awaited<ReturnType<typeof GetUsers>> = [];
 
 	onMount(() => {
 		GetUsers()
 			.then((data) => {
+				console.log(data);
 				if (data) users = data;
 			})
 			.catch((err) => {
 				console.error(err);
 			});
 	});
+
+	const getAbbr = (user: { Name: string }) =>
+		user?.Name?.split(" ")
+			?.slice(0, 2)
+			?.reduce((acc, v) => acc + v?.[0]?.toUpperCase(), "");
 </script>
 
-<Button.Root
-	on:click={() => {
-		console.log("clicked");
-	}}
-	class="inline-flex h-12 items-center justify-center rounded-input bg-dark
-px-[21px] text-[15px] font-semibold text-background shadow-mini
-hover:bg-dark/95 active:scale-98 active:transition-all"
->
-	FUCK
-</Button.Root>
-{#each users as user}
-	<Button.Root
-		class="inline-flex h-12 items-center justify-center rounded-input bg-dark
-px-[21px] text-[15px] font-semibold text-background shadow-mini
-hover:bg-dark/95 active:scale-98 active:transition-all"
-	>
-		{user?.name}
-	</Button.Root>
-{/each}
+<div class="flex gap-2">
+	{#each users as user}
+		<Button.Root
+			class="inline-flex items-center justify-center rounded-input bg-dark/0
+	p-2 text-[15px] text-dark shadow-mini
+	hover:bg-dark/15 active:scale-98 active:transition-all w-24"
+		>
+			<div class="flex flex-col gap-2 items-center justify-center">
+				<Avatar.Root
+					class="h-12 w-12 rounded-full border border-foreground bg-muted text-[17px] font-medium uppercase text-muted-foreground"
+				>
+					<div
+						class="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-transparent"
+					>
+						<Avatar.Fallback class="border border-muted"
+							>{getAbbr(user)}</Avatar.Fallback
+						>
+					</div>
+				</Avatar.Root>
+				<p class="text-center line-clamp-2 break-words overflow-ellipsis">
+					{user?.Name}
+				</p>
+			</div>
+		</Button.Root>
+	{/each}
+
+	<AddProfileDialog>
+		<Button.Root
+			class="inline-flex items-center justify-center rounded-input bg-dark/0
+	p-2 text-[15px] text-dark shadow-mini
+	hover:bg-dark/15 active:scale-98 active:transition-all w-24"
+		>
+			<div class="flex flex-col gap-2 items-center justify-center">
+				<Avatar.Root
+					class="h-12 w-12 rounded-full border border-foreground bg-muted text-[17px] font-medium uppercase text-muted-foreground"
+				>
+					<div
+						class="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-transparent"
+					>
+						<Avatar.Fallback class="border border-muted"
+							><Plus /></Avatar.Fallback
+						>
+					</div>
+				</Avatar.Root>
+				<p class="text-center line-clamp-2 break-words overflow-ellipsis">
+					Add Profile
+				</p>
+			</div>
+		</Button.Root>
+	</AddProfileDialog>
+</div>
