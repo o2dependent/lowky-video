@@ -60,8 +60,13 @@ func InitDB() error {
 	// --- CREATE TABLES ---
 	createTable := `CREATE TABLE IF NOT EXISTS profiles (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			name TEXT
-	);`
+			name TEXT NOT NULL
+	);
+	CREATE TABLE IF NOT EXISTS config (
+		id INTEGER PRIMARY KEY CHECK (id = 1),
+		directory TEXT NOT NULL
+	);
+	`
 
 	_, err = DB.Exec(createTable)
 	if err != nil {

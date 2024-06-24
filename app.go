@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"lowkyvideo/db"
 	"os/exec"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -66,6 +68,7 @@ func (a *App) startup(ctx context.Context) {
 	}
 
 	db.InitDB()
+	db.SeedConfig()
 
 	a.ctx = ctx
 }
@@ -93,6 +96,23 @@ func (a *App) InstallCrunchyCLI() bool {
 func (a *App) LoginToCrunchyCLI() bool {
 	// TODO
 	return true
+}
+
+func (a *App) OpenVideoFolderDialog() (string, error) {
+	directory, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{Title: "Select existing Lowky Video folder or select parent folder where a Lowky Video folder will be created.", CanCreateDirectories: true})
+	if err != nil {
+		fmt.Println("Error selecting directory: ", err)
+		return "", err
+	}
+	return directory, nil
+}
+
+func (a *App) SetConfigDirectory(directory string) error {
+	return db.UpdateConfigDirectory(directory)
+}
+
+func (a *App) GetConfig() (*db.Config, error) {
+	return db.GetConfig()
 }
 
 func (a *App) GetProfiles() ([]*db.Profile, error) {

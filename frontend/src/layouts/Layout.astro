@@ -1,6 +1,6 @@
 ---
 import "../main.postcss";
-import ProfileLoader from "../components/ProfileLoader.svelte";
+import StoreDataLoader from "../components/StoreDataLoader.svelte";
 interface Props {
 	title: string;
 }
@@ -19,7 +19,7 @@ const { title } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body>
-		<ProfileLoader client:only="svelte" />
+		<StoreDataLoader client:only="svelte" />
 		<slot />
 	</body>
 </html>

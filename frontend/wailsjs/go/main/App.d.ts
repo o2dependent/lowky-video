@@ -6,6 +6,8 @@ export function CreateProfile(arg1:string):Promise<void>;
 
 export function GetCLIInstalledStatus():Promise<boolean>;
 
+export function GetConfig():Promise<db.Config>;
+
 export function GetProfile(arg1:number):Promise<db.Profile>;
 
 export function GetProfiles():Promise<Array<db.Profile>>;
@@ -15,3 +17,7 @@ export function Greet(arg1:string):Promise<string>;
 export function InstallCrunchyCLI():Promise<boolean>;
 
 export function LoginToCrunchyCLI():Promise<boolean>;
+
+export function OpenVideoFolderDialog():Promise<string>;
+
+export function SetConfigDirectory(arg1:string):Promise<void>;

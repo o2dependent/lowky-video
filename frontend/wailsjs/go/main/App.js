@@ -10,6 +10,10 @@ export function GetCLIInstalledStatus() {
   return window['go']['main']['App']['GetCLIInstalledStatus']();
 }
 
+export function GetConfig() {
+  return window['go']['main']['App']['GetConfig']();
+}
+
 export function GetProfile(arg1) {
   return window['go']['main']['App']['GetProfile'](arg1);
 }
@@ -28,4 +32,12 @@ export function InstallCrunchyCLI() {
 
 export function LoginToCrunchyCLI() {
   return window['go']['main']['App']['LoginToCrunchyCLI']();
+}
+
+export function OpenVideoFolderDialog() {
+  return window['go']['main']['App']['OpenVideoFolderDialog']();
+}
+
+export function SetConfigDirectory(arg1) {
+  return window['go']['main']['App']['SetConfigDirectory'](arg1);
 }
