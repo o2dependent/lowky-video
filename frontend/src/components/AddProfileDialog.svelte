@@ -5,6 +5,7 @@
 	import { X } from "phosphor-svelte";
 	let name = "";
 	let error: null | string = null;
+	let open = false;
 
 	const addProfile = async () => {
 		try {
@@ -17,7 +18,7 @@
 	};
 </script>
 
-<Dialog.Root>
+<Dialog.Root {open} onOpenChange={(o) => (open = o)}>
 	<Dialog.Trigger>
 		<slot />
 	</Dialog.Trigger>
@@ -25,23 +26,18 @@
 		<Dialog.Overlay
 			transition={fade}
 			transitionConfig={{ duration: 150 }}
-			class="fixed inset-0 z-50 bg-black/80"
+			class="fixed inset-0 z-50 bg-black/25 backdrop-blur-md"
 		/>
 		<Dialog.Content
 			transition={fly}
+			transitionConfig={{ duration: 250, x: 0, y: 32 }}
 			class="fixed left-[50%] top-[50%] z-50 w-full max-w-[94%] translate-x-[-50%] translate-y-[-50%] rounded-card-lg border bg-background p-5 shadow-popover outline-none sm:max-w-[490px] md:w-full"
 		>
-			<Dialog.Title
-				class="flex w-full items-center justify-center text-lg font-semibold tracking-tight"
+			<Dialog.Title class="flex w-full text-lg font-semibold tracking-tight"
 				>Add new profile</Dialog.Title
 			>
-			<Separator.Root class="-mx-5 mb-6 mt-5 block h-px bg-muted" />
-			<Dialog.Description class="text-sm text-foreground-alt">
-				Create and manage API keys. You can create multiple keys to organize
-				your applications.
-			</Dialog.Description>
 			<form on:submit|preventDefault={addProfile}>
-				<div class="flex flex-col items-start gap-1 pb-11 pt-7">
+				<div class="flex flex-col items-start gap-1 pb-6 pt-7">
 					<Label.Root for="profile-name" class="text-sm font-medium"
 						>Profile Name</Label.Root
 					>
@@ -55,21 +51,17 @@
 						/>
 					</div>
 				</div>
-				<Button.Root
-					class="inline-flex h-12 items-center justify-center rounded-input bg-dark
-				px-[21px] text-[15px] font-semibold text-background shadow-mini
-				hover:bg-dark/95 active:scale-98 active:transition-all"
-				>
-					Add Profile
-				</Button.Root>
+				<div class="flex w-full justify-end">
+					<Button.Root
+						type="submit"
+						class="inline-flex h-12 items-center justify-center rounded-input bg-dark
+					px-[21px] text-[15px] font-semibold text-background shadow-mini
+					hover:bg-dark/95 active:scale-98 active:transition-all"
+					>
+						Add Profile
+					</Button.Root>
+				</div>
 			</form>
-			<div class="flex w-full justify-end">
-				<Dialog.Close
-					class="inline-flex h-input items-center justify-center rounded-input bg-dark px-[50px] text-[15px] font-semibold text-background shadow-mini hover:bg-dark/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-98"
-				>
-					Save
-				</Dialog.Close>
-			</div>
 			<Dialog.Close
 				class="absolute right-5 top-5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-98"
 			>

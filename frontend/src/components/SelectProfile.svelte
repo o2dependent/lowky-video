@@ -29,7 +29,7 @@
 	{#each users as user}
 		<Button.Root
 			class="inline-flex items-center justify-center rounded-input bg-dark/0
-	p-2 text-[15px] text-dark shadow-mini
+	p-2 text-[15px] text-dark shadow-none hover:shadow-mini
 	hover:bg-dark/15 active:scale-98 active:transition-all w-24"
 		>
 			<div class="flex flex-col gap-2 items-center justify-center">
@@ -54,7 +54,7 @@
 	<AddProfileDialog>
 		<Button.Root
 			class="inline-flex items-center justify-center rounded-input bg-dark/0
-	p-2 text-[15px] text-dark shadow-mini
+	p-2 text-[15px] text-dark shadow-none hover:shadow-mini
 	hover:bg-dark/15 active:scale-98 active:transition-all w-24"
 		>
 			<div class="flex flex-col gap-2 items-center justify-center">
