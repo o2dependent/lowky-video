@@ -1,13 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import SelectProfile from "../components/SelectProfile.svelte";
-import SelectVideoDirectory from "../components/SelectVideoDirectory.svelte";
+import HomePage from "./index.svelte";
 ---
 
 <Layout title="Welcome to Astro.">
 	<main class="flex flex-col gap-4 justify-center items-center h-full">
-		<SelectVideoDirectory client:only="svelte" />
-		<h1 class="text-xl">Select your profile</h1>
-		<SelectProfile client:only="svelte" />
+		<HomePage client:only="svelte" />
 	</main>
 </Layout>

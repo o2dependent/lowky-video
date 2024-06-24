@@ -4,16 +4,30 @@
 	import { Plus } from "phosphor-svelte";
 	import AddProfileDialog from "./AddProfileDialog.svelte";
 
+	export let next: () => void;
+
+	let error: string | null = null;
+
 	const getAbbr = (profile: { Name: string }) =>
 		profile?.Name?.split(" ")
 			?.slice(0, 2)
 			?.reduce((acc, v) => acc + v?.[0]?.toUpperCase(), "");
+
+	const onProfileSelect = async (ID: number) => {
+		try {
+			await setProfile(ID);
+			next();
+		} catch (err) {
+			console.error(err);
+			error = "Failed to set profile. Please try again.";
+		}
+	};
 </script>
 
 <div class="flex gap-2">
-	{#each $profiles as profile}
+	{#each $profiles ?? [] as profile}
 		<Button.Root
-			on:click={() => setProfile(profile.ID)}
+			on:click={() => onProfileSelect(profile.ID)}
 			class="inline-flex items-center justify-center rounded-input bg-dark/0
 	p-2 text-[15px] text-dark shadow-none hover:shadow-mini
 	hover:bg-dark/15 active:scale-98 active:transition-all w-24"
@@ -25,9 +39,9 @@
 					<div
 						class="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-transparent"
 					>
-						<Avatar.Fallback class="border border-muted"
-							>{getAbbr(profile)}</Avatar.Fallback
-						>
+						<Avatar.Fallback class="border border-muted">
+							{getAbbr(profile)}
+						</Avatar.Fallback>
 					</div>
 				</Avatar.Root>
 				<p class="text-center line-clamp-2 break-words overflow-ellipsis">
@@ -50,9 +64,9 @@
 					<div
 						class="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-transparent"
 					>
-						<Avatar.Fallback class="border border-muted"
-							><Plus /></Avatar.Fallback
-						>
+						<Avatar.Fallback class="border border-muted">
+							<Plus />
+						</Avatar.Fallback>
 					</div>
 				</Avatar.Root>
 				<p class="text-center line-clamp-2 break-words overflow-ellipsis">

@@ -7,6 +7,22 @@
 	let name = "";
 	let error: null | string = null;
 	let open = false;
+
+	const onSubmit = async () => {
+		if (!name) {
+			error = "Profile name is required.";
+			return;
+		}
+
+		try {
+			await addProfile(name);
+			open = false;
+			name = "";
+		} catch (err) {
+			console.error(err);
+			error = "Failed to add profile. Please try again.";
+		}
+	};
 </script>
 
 <Dialog.Root {open} onOpenChange={(o) => (open = o)}>
@@ -27,7 +43,7 @@
 			<Dialog.Title class="flex w-full text-lg font-semibold tracking-tight"
 				>Add new profile</Dialog.Title
 			>
-			<form on:submit|preventDefault={() => addProfile(name)}>
+			<form on:submit|preventDefault={onSubmit}>
 				<div class="flex flex-col items-start gap-1 pb-6 pt-7">
 					<Label.Root for="profile-name" class="text-sm font-medium"
 						>Profile Name</Label.Root
