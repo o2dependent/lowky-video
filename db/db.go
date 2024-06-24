@@ -57,7 +57,8 @@ func InitDB() error {
 		return err
 	}
 
-	createTable := `CREATE TABLE IF NOT EXISTS users (
+	// --- CREATE TABLES ---
+	createTable := `CREATE TABLE IF NOT EXISTS profiles (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT
 	);`

@@ -1,21 +1,12 @@
 <script lang="ts">
-	import { Button, Dialog, Label, Separator } from "bits-ui";
+	import { Button, Dialog, Label } from "bits-ui";
 	import { fade, fly } from "svelte/transition";
-	import { CreateUser } from "wailsjs/go/main/App";
 	import { X } from "phosphor-svelte";
+	import { addProfile } from "@/stores/profiles";
+
 	let name = "";
 	let error: null | string = null;
 	let open = false;
-
-	const addProfile = async () => {
-		try {
-			console.log(name);
-			await CreateUser(name);
-		} catch (error) {
-			console.error(error);
-			error = "Failed to create user";
-		}
-	};
 </script>
 
 <Dialog.Root {open} onOpenChange={(o) => (open = o)}>
@@ -36,7 +27,7 @@
 			<Dialog.Title class="flex w-full text-lg font-semibold tracking-tight"
 				>Add new profile</Dialog.Title
 			>
-			<form on:submit|preventDefault={addProfile}>
+			<form on:submit|preventDefault={() => addProfile(name)}>
 				<div class="flex flex-col items-start gap-1 pb-6 pt-7">
 					<Label.Root for="profile-name" class="text-sm font-medium"
 						>Profile Name</Label.Root

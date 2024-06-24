@@ -95,14 +95,14 @@ func (a *App) LoginToCrunchyCLI() bool {
 	return true
 }
 
-func (a *App) GetUsers() ([]*db.User, error) {
-	return db.GetUsers()
+func (a *App) GetProfiles() ([]*db.Profile, error) {
+	return db.GetProfiles()
 }
 
-func (a *App) CreateUser(name string) error {
-	return db.CreateUser(name)
+func (a *App) CreateProfile(name string) error {
+	return db.CreateProfile(name)
 }
 
-func (a *App) GetUser(id int) (*db.User, error) {
-	return db.GetUser(id)
+func (a *App) GetProfile(id int) (*db.Profile, error) {
+	return db.GetProfile(id)
 }

@@ -1,32 +1,20 @@
 <script lang="ts">
+	import { profiles } from "./../stores/profiles.ts";
 	import { Avatar, Button } from "bits-ui";
 	import { Plus } from "phosphor-svelte";
 	import { onMount } from "svelte";
-	import { GetUsers } from "wailsjs/go/main/App";
+	import { GetProfiles } from "wailsjs/go/main/App";
 	import AddProfileForm from "./AddProfileDialog.svelte";
 	import AddProfileDialog from "./AddProfileDialog.svelte";
 
-	let users: Awaited<ReturnType<typeof GetUsers>> = [];
-
-	onMount(() => {
-		GetUsers()
-			.then((data) => {
-				console.log(data);
-				if (data) users = data;
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	});
-
-	const getAbbr = (user: { Name: string }) =>
-		user?.Name?.split(" ")
+	const getAbbr = (profile: { Name: string }) =>
+		profile?.Name?.split(" ")
 			?.slice(0, 2)
 			?.reduce((acc, v) => acc + v?.[0]?.toUpperCase(), "");
 </script>
 
 <div class="flex gap-2">
-	{#each users as user}
+	{#each $profiles as profile}
 		<Button.Root
 			class="inline-flex items-center justify-center rounded-input bg-dark/0
 	p-2 text-[15px] text-dark shadow-none hover:shadow-mini
@@ -40,12 +28,12 @@
 						class="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-transparent"
 					>
 						<Avatar.Fallback class="border border-muted"
-							>{getAbbr(user)}</Avatar.Fallback
+							>{getAbbr(profile)}</Avatar.Fallback
 						>
 					</div>
 				</Avatar.Root>
 				<p class="text-center line-clamp-2 break-words overflow-ellipsis">
-					{user?.Name}
+					{profile?.Name}
 				</p>
 			</div>
 		</Button.Root>
